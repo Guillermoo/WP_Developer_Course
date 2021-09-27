@@ -65,7 +65,6 @@ function university_post_types() {
     ));
 
     //Professor Post Type
-
     register_post_type('professor',array(
         'supports' => array('title','editor','thumbnail'),
         'show_in_rest' => true,
@@ -112,6 +111,22 @@ function university_post_types() {
             'edit_item' => 'Edit Like',
             'all_items' => 'All Likes',
             'singular_name' => 'Like',
+        ),
+        'public' => false
+    ));
+
+    //Slideshare Post Type
+    register_post_type('slide',array(
+        'supports' => array('title'),
+        'menu_icon' => 'dashicons-slides',
+        'show_ui' => true,
+        //'show_in_rest' => true,        
+        'labels' => array(
+            'name' => 'Slides',
+            'add_new_item' => 'Add New Slide',
+            'edit_item' => 'Edit Slide',
+            'all_items' => 'All Slides',
+            'singular_name' => 'Slide',
         ),
         'public' => false
     ));
