@@ -69,7 +69,6 @@ function university_post_types() {
         'supports' => array('title','editor','thumbnail'),
         'show_in_rest' => true,
         'menu_icon' => 'dashicons-welcome-learn-more',
-        'show_in_rest' => true,        
         'labels' => array(
             'name' => 'Professor',
             'add_new_item' => 'Add New Professor',
@@ -117,7 +116,7 @@ function university_post_types() {
 
     //Slideshare Post Type
     register_post_type('slide',array(
-        'supports' => array('title'),
+        'supports' => array('title','thumbnail'),
         'menu_icon' => 'dashicons-slides',
         'show_ui' => true,
         //'show_in_rest' => true,        

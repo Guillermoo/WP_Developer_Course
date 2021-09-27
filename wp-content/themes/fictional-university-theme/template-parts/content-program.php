@@ -6,5 +6,4 @@
         <?php the_excerpt(); ?>
         <p><a class="btn btn--blue" href="<?php the_permalink(); ?>">View program...</a> </p>
     </div>
-
 </div>
