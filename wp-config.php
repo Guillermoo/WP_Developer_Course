@@ -28,13 +28,13 @@ if (strstr($_SERVER['SERVER_NAME'], 'fictionaluniversity.local')){
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'local' );
+define( 'DB_NAME', 'wp_ykc3e' );
 
 /** MySQL database username */
-define( 'DB_USER', 'root' );
+define( 'DB_USER', 'wp_v4e0r' );
 
 /** MySQL database password */
-define( 'DB_PASSWORD', 'root' );
+define( 'DB_PASSWORD', 'P?0$fnZw4@4MWby?' );
 
 /** MySQL hostname */
 define( 'DB_HOST', 'localhost' );
