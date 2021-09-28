@@ -90,10 +90,13 @@
                 'post_type' => 'slide',
                 'posts_per_page' => 5
               ));
-              while ($homePageSlides->have_posts()) {
-                $homePageSlides->the_post();
-                get_template_part('template-parts/content-slider');
-              } wp_reset_postdata();
+              if ($homePageSlides->have_posts()) {
+                while ($homePageSlides->have_posts()) {
+                  $homePageSlides->the_post();
+                  get_template_part('template-parts/content-slider');
+                } wp_reset_postdata();
+              }
+              
             ?>
           </div>
         </div>
