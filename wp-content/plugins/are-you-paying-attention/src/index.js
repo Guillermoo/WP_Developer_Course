@@ -2,22 +2,29 @@ wp.blocks.registerBlockType('ourplugin/are-you-paying-attention',{
     title: 'Are you Payung Attention?',
     icon: 'smiley',
     category: 'common',
-    edit: function() {
+    attributes: {
+        skyColor:{type: "string"},
+        grassColor:{type: "string"}
+    },
+    edit: function(props) {
         //Vista del admin
+        
+        function updateSkyColor(event){
+            props.setAttributes({skyColor: event.target.value})
+        }
+        function updateGrassColor(event){
+            props.setAttributes({grassColor: event.target.value})
+        }
+        
         return (
-            <div><p>Hello, this is a paragraph</p>
-                <h3>This is a H3 from JSX.</h3>
+            <div>
+                <input type="text" placeholder="sky color" value={props.attributes.skyColor} onChange={updateSkyColor}/>
+                <input type="text" placeholder="grass color" value={props.attributes.grassColor} onChange={updateGrassColor}/>
             </div>
         ) 
     },
-    save: function () {
+    save: function (props) {
         //Vista del cliente
-        return (
-            <>
-                <h3>This is heading 3</h3>
-                <h5>This is heading 5</h5>
-            </>
-            
-        )
+        return null
     }
 });

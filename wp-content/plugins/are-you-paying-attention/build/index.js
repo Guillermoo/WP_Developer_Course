@@ -94,13 +94,43 @@ wp.blocks.registerBlockType('ourplugin/are-you-paying-attention', {
   title: 'Are you Payung Attention?',
   icon: 'smiley',
   category: 'common',
-  edit: function () {
-    //Vista del admin
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Hello, this is a paragraph"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "This is a H3 from JSX."));
+  attributes: {
+    skyColor: {
+      type: "string"
+    },
+    grassColor: {
+      type: "string"
+    }
   },
-  save: function () {
+  edit: function (props) {
+    //Vista del admin
+    function updateSkyColor(event) {
+      props.setAttributes({
+        skyColor: event.target.value
+      });
+    }
+
+    function updateGrassColor(event) {
+      props.setAttributes({
+        grassColor: event.target.value
+      });
+    }
+
+    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+      type: "text",
+      placeholder: "sky color",
+      value: props.attributes.skyColor,
+      onChange: updateSkyColor
+    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+      type: "text",
+      placeholder: "grass color",
+      value: props.attributes.grassColor,
+      onChange: updateGrassColor
+    }));
+  },
+  save: function (props) {
     //Vista del cliente
-    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, "This is heading 3"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, "This is heading 5"));
+    return null;
   }
 });
 }();
