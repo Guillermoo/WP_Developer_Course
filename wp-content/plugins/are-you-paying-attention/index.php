@@ -33,13 +33,19 @@ class AreYouPayingAttention {
     }
 
     function theHTML($attributes){
+
+        if (!is_admin()) {
+            wp_enqueue_script('attentionFrontend', plugin_dir_url(__FILE__) . 'build/frontend.js', array('wp-element'));
+            wp_enqueue_style('attentionFrontendStyles', plugin_dir_url(__FILE__) . 'build/frontend.css');
+            # code...
+        }
+        
         ob_start(); ?>
 
-        <p>Today the sky is <?php echo $attributes['skyColor'] ?> and the grass is <?php echo $attributes['grassColor']  ?>!!!</p>
-
+        <div class="paying-attention-update-me"><pre style="display:none"><?php echo wp_json_encode($attributes) ?></pre></div>
         <?php return ob_get_clean();
 
-        // SE usa este return pero es menos cómodo para poner html, por eso usamos o de ob_start
+        // Se usa este return pero es menos cómodo para poner html, por eso usamos o de ob_start
         //return '<p>Today the sky is ' . $attributes['skyColor'] . ' and the grass is ' . $attributes['grassColor'] . '!!!</p>';
     }
 }

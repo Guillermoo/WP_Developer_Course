@@ -116,6 +116,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
 
 
+ // Podemos crear esta función sin nombre. En el parentesis final se puede ejecutar lo que sea despues de eta función.
+// Las variables viven sólo dentro de la función
+// IIFE Inmendiatly invoke function expression
+
+(function () {
+  let locked = false;
+  wp.data.subscribe(function () {
+    const results = wp.data.select("core/block-editor").getBlocks().filter(function (block) {
+      return block.name == "ourplugin/are-you-paying-attention" && block.attributes.correctAnswer == undefined;
+    });
+
+    if (results.length && locked == false) {
+      locked = true;
+      wp.data.dispatch("core/editor").lockPostSaving("noanswer");
+    }
+
+    if (!results.length && locked) {
+      locked = false;
+      wp.data.dispatch("core/editor").unlockPostSaving("noanswer");
+    }
+  });
+})();
 
 wp.blocks.registerBlockType('ourplugin/are-you-paying-attention', {
   title: 'Are you Payung Attention?',
@@ -128,6 +150,10 @@ wp.blocks.registerBlockType('ourplugin/are-you-paying-attention', {
     answers: {
       type: "array",
       default: ["red", "blue"]
+    },
+    correctAnswer: {
+      type: "number",
+      default: undefined
     }
   },
   edit: EditComponents,
@@ -143,7 +169,8 @@ function EditComponents(props) {
     props.setAttributes({
       question: value
     });
-  }
+  } // Función que elimina un elemento del array (sin modificar estado en react)
+
 
   function deleteAnswer(indexToDelete) {
     const newAnswers = props.attributes.answers.filter(function (x, index) {
@@ -151,6 +178,18 @@ function EditComponents(props) {
     });
     props.setAttributes({
       answers: newAnswers
+    });
+
+    if (indexToDelete == props.attributes.correctAnswer) {
+      props.setAttributes({
+        correctAnswer: undefined
+      });
+    }
+  }
+
+  function markAsCorrect(indexToCorrect) {
+    props.setAttributes({
+      correctAnswer: indexToCorrect
     });
   }
 
@@ -171,6 +210,7 @@ function EditComponents(props) {
   }, "Answers:"), props.attributes.answers.map(function (answer, index) {
     return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Flex, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexBlock, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
       value: answer,
+      autoFocus: answer == undefined,
       onChange: newValue => {
         const newAnswers = props.attributes.answers.concat([]);
         newAnswers[index] = newValue;
@@ -178,9 +218,11 @@ function EditComponents(props) {
           answers: newAnswers
         });
       }
-    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexItem, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Icon, {
+    })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexItem, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
+      onClick: () => markAsCorrect(index)
+    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Icon, {
       className: "mark-as-correct",
-      icon: "star-empty"
+      icon: props.attributes.correctAnswer == index ? "star-filled" : "star-empty"
     }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.FlexItem, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Button, {
       isLink: true,
       className: "attention-delete",
@@ -190,7 +232,7 @@ function EditComponents(props) {
     isPrimary: true,
     onClick: () => {
       props.setAttributes({
-        answers: props.attributes.answers.concat([""])
+        answers: props.attributes.answers.concat([undefined])
       });
     }
   }, "Add another answer"));
