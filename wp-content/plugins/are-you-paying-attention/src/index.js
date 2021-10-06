@@ -1,5 +1,7 @@
 import "./index.scss"
-import {TextControl, Flex, FlexBlock,FlexItem,Button,Icon} from "@wordpress/components"
+import {TextControl, Flex, FlexBlock,FlexItem,Button,Icon, PanelBody, PanelRow, ColorPicker} from "@wordpress/components"
+import {InspectorControls, BlockControls,AlignmentToolbar} from "@wordpress/block-editor"
+import {ChromePicker} from "react-color"
 
 
 // Podemos crear esta función sin nombre. En el parentesis final se puede ejecutar lo que sea despues de eta función.
@@ -33,7 +35,20 @@ wp.blocks.registerBlockType('ourplugin/are-you-paying-attention',{
     attributes: {
         question:{type: "string"},
         answers: {type: "array", default:["red", "blue"]},
-        correctAnswer: {type: "number", default:undefined}
+        correctAnswer: {type: "number", default:undefined},
+        bgColor: {type: 'string', default: '#EBEBEB'},
+        theAlignment: {type: 'string', default: 'left'}
+    },
+    description: "Give your audience a chace to prove their comprehension",
+    // Si queremos tener una preview desde el menú admin
+    example: {
+        attributes: {
+            question:'What is my name',
+            answers: ['Meiwsakit','Barksalot','Purrsloud','Brad'],
+            correctAnswer: 3,
+            bgColor: '#CFE8F1',
+            theAlignment: 'center'
+        }
     },
     edit: EditComponents,
     save: function (props) {
@@ -67,7 +82,17 @@ function EditComponents(props) {
     }
 
     return (
-        <div className="paying-attention-edit-block">
+        <div className="paying-attention-edit-block" style={{backgroundColor: props.attributes.bgColor}}>
+            <BlockControls>
+                <AlignmentToolbar value={props.attributes.theAlignment} onChange={x => props.setAttributes({theAlignment: x})}></AlignmentToolbar>
+            </BlockControls>
+            <InspectorControls>
+                <PanelBody title="Background Color" initialOpen={true}>
+                    <PanelRow>
+                        <ChromePicker color={props.attributes.bgColor} onChangeComplete={x => props.setAttributes({bgColor: x.hex})} disableAlpcha={true} />
+                    </PanelRow>
+                </PanelBody>
+            </InspectorControls>
             <TextControl label="Question:" value={props.attributes.question} onChange={updateQuestion} style={{fontSize:'20px'}} />
             {/* Se puede usar html normal, pero mejor usar los componentes de wordpress */}
             {/* <input type="text" placeholder="sky color" value={props.attributes.skyColor} onChange={updateSkyColor}/> */}
